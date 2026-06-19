@@ -32,8 +32,10 @@ ENV APACHE_DOCUMENT_ROOT /var/www/html/public
 RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf
 RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
 
-# Instalar las dependencias de Laravel y compilar los componentes de React con Vite
-RUN composer install --no-dev --optimize-autoloader
+# Instalar las dependencias de Laravel sin ejecutar los scripts automáticos que piden la APP_KEY
+RUN composer install --no-dev --optimize-autoloader --no-scripts
+
+# Compilar los componentes de React con Vite
 RUN npm install && npm run build
 
 # Configurar los permisos correctos para el almacenamiento de Laravel
